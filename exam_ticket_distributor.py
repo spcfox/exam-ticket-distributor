@@ -29,22 +29,19 @@ def main():
             out_dir = os.path.dirname(args.output)
             if out_dir:
                 os.makedirs(os.path.dirname(args.output), exist_ok=True)
+
+            with open(args.output, 'w') as file:
+                try:
+                    write_tickets(file, students, tickets, args.delimiter)
+                except PermissionError:
+                    print(f'Permission denied for file {args.output}')
+                    sys.exit(1)
         except PermissionError:
             print(f'Permission denied for directory {os.path.dirname(args.output)}')
             sys.exit(1)
         except Exception as e:
             print(f'Unexpected write error: {e}')
             sys.exit(1)
-
-        with open(args.output, 'w') as file:
-            try:
-                write_tickets(file, students, tickets, args.delimiter)
-            except PermissionError:
-                print(f'Permission denied for file {args.output}')
-                sys.exit(1)
-            except Exception as e:
-                print(f'Unexpected write error: {e}')
-                sys.exit(1)
 
 
 def parse_args():
